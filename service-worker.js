@@ -1,10 +1,13 @@
-const CACHE_NAME = "aktienbewertung-v1";
+const CACHE_NAME = "aktienbewertung-v2";
 
+const APP_FILES = [
 const APP_FILES = [
     "./",
     "./index.html",
     "./app.js",
-    "./manifest.json"
+    "./manifest.json",
+    "./icon-192.png",
+    "./icon-512.png"
 ];
 
 self.addEventListener(
