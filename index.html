@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111827"
+    >
+
+    <meta
+        name="description"
+        content="Persönliche Aktienbewertung"
+    >
+
+    <title>Aktienbewertung</title>
+
+
+    <!-- =====================================================
+         PWA
+         ===================================================== -->
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        :root {
+
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+
+            --dark: #111827;
+            --dark-hover: #1f2937;
+
+            --green-bg: #dcfce7;
+            --green-text: #166534;
+
+            --yellow-bg: #fef3c7;
+            --yellow-text: #92400e;
+
+            --orange-bg: #ffedd5;
+            --orange-text: #9a3412;
+
+            --red-bg: #fee2e2;
+            --red-text: #991b1b;
+
+            --gray-bg: #e5e7eb;
+            --gray-text: #4b5563;
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+            padding: 0;
+
+            background: var(--bg);
+            color: var(--text);
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            padding-bottom:
+                calc(
+                    80px +
+                    env(safe-area-inset-bottom)
+                );
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        header {
+
+            background: var(--dark);
+            color: white;
+
+            padding:
+                calc(
+                    18px +
+                    env(safe-area-inset-top)
+                )
+                18px
+                18px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
+
+            box-shadow:
+                0 2px 12px
+                rgba(0,0,0,.12);
+        }
+
+
+        .header-inner {
+
+            max-width: 900px;
+            margin: auto;
+        }
+
+
+        h1 {
+
+            margin: 0;
+
+            font-size: 21px;
+            font-weight: 750;
+        }
+
+
+        .subtitle {
+
+            margin-top: 4px;
+
+            color: #9ca3af;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        main {
+
+            max-width: 900px;
+
+            margin: auto;
+
+            padding: 16px;
+        }
+
+
+        .view {
+
+            display: none;
+        }
+
+
+        .view.active {
+
+            display: block;
+        }
+
+
+        /* =====================================================
+           BUTTONS
+           ===================================================== */
+
+        button {
+
+            width: 100%;
+
+            font-family: inherit;
+
+            cursor: pointer;
+        }
+
+
+        .primary {
+
+            border: none;
+
+            border-radius: 13px;
+
+            background:
+                var(--dark);
+
+            color: white;
+
+            padding: 14px;
+
+            font-size: 15px;
+
+            font-weight: 700;
+        }
+
+
+        .primary:hover {
+
+            background:
+                var(--dark-hover);
+        }
+
+
+        .secondary {
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 11px;
+
+            background: white;
+
+            color: #374151;
+
+            padding: 12px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .danger {
+
+            border: none;
+
+            border-radius: 11px;
+
+            background:
+                var(--red-bg);
+
+            color:
+                var(--red-text);
+
+            padding: 12px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           FORMULAR
+           ===================================================== */
+
+        .card {
+
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 17px;
+
+            margin-bottom: 14px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0,0,0,.06);
+        }
+
+
+        .form-card {
+
+            display: none;
+
+            margin-top: 14px;
+        }
+
+
+        .form-card.active {
+
+            display: block;
+        }
+
+
+        .card-title {
+
+            margin:
+                0 0 16px;
+
+            font-size: 18px;
+
+            font-weight: 750;
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            gap: 13px;
+        }
+
+
+        .field {
+
+            display: grid;
+
+            gap: 6px;
+        }
+
+
+        .field label {
+
+            font-size: 12px;
+
+            color:
+                #374151;
+
+            font-weight: 650;
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            height: 48px;
+
+            border:
+                1px solid
+                #d1d5db;
+
+            border-radius: 10px;
+
+            background: white;
+
+            padding: 0 12px;
+
+            font-size: 16px;
+
+            color: var(--text);
+
+            outline: none;
+        }
+
+
+        input:focus,
+        select:focus {
+
+            border-color:
+                #374151;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(17,24,39,.08);
+        }
+
+
+        .form-actions {
+
+            display: grid;
+
+            gap:
+                8px;
+
+            margin-top:
+                4px;
+        }
+
+
+        /* =====================================================
+           AKTIEN
+           ===================================================== */
+
+        .section-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin:
+                24px 2px 12px;
+        }
+
+
+        .section-title {
+
+            margin: 0;
+
+            font-size: 18px;
+
+            font-weight: 750;
+        }
+
+
+        .count {
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+        }
+
+
+        .stocks {
+
+            display: grid;
+
+            gap:
+                12px;
+        }
+
+
+        .stock-card {
+
+            background: white;
+
+            border-radius:
+                17px;
+
+            padding:
+                16px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0,0,0,.06);
+        }
+
+
+        .stock-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+
+            gap:
+                12px;
+        }
+
+
+        .stock-name {
+
+            font-size:
+                17px;
+
+            font-weight:
+                750;
+        }
+
+
+        .stock-branch {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+        }
+
+
+        .stock-price {
+
+            white-space:
+                nowrap;
+
+            font-size:
+                18px;
+
+            font-weight:
+                750;
+        }
+
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .status {
+
+            display:
+                inline-flex;
+
+            margin-top:
+                13px;
+
+            padding:
+                6px 10px;
+
+            border-radius:
+                999px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .status-kauf {
+
+            background:
+                var(--green-bg);
+
+            color:
+                var(--green-text);
+        }
+
+
+        .status-aufbau {
+
+            background:
+                var(--yellow-bg);
+
+            color:
+                var(--yellow-text);
+        }
+
+
+        .status-kein-kauf {
+
+            background:
+                var(--red-bg);
+
+            color:
+                var(--red-text);
+        }
+
+
+        .status-nicht {
+
+            background:
+                var(--gray-bg);
+
+            color:
+                var(--gray-text);
+        }
+
+
+        /* =====================================================
+           KENNZAHLEN
+           ===================================================== */
+
+        .metrics {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0,1fr)
+                );
+
+            gap:
+                10px;
+
+            margin-top:
+                14px;
+        }
+
+
+        .metric {
+
+            padding:
+                10px;
+
+            border-radius:
+                11px;
+
+            background:
+                #f9fafb;
+        }
+
+
+        .metric-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+        }
+
+
+        .metric-value {
+
+            margin-top:
+                3px;
+
+            font-size:
+                15px;
+
+            font-weight:
+                700;
+        }
+
+
+        .score-4 {
+
+            background:
+                var(--green-bg);
+
+            color:
+                var(--green-text);
+        }
+
+
+        .score-3 {
+
+            background:
+                var(--yellow-bg);
+
+            color:
+                var(--yellow-text);
+        }
+
+
+        .score-2 {
+
+            background:
+                var(--orange-bg);
+
+            color:
+                var(--orange-text);
+        }
+
+
+        .score-1 {
+
+            background:
+                var(--red-bg);
+
+            color:
+                var(--red-text);
+        }
+
+
+        .score-0 {
+
+            background:
+                var(--gray-bg);
+
+            color:
+                var(--gray-text);
+        }
+
+
+        .buy-good {
+
+            background:
+                var(--green-bg);
+
+            color:
+                var(--green-text);
+        }
+
+
+        .score-summary {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-top:
+                12px;
+
+            padding-top:
+                12px;
+
+            border-top:
+                1px solid
+                var(--border);
+        }
+
+
+        .score-description {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+        }
+
+
+        .score-big {
+
+            font-size:
+                20px;
+
+            font-weight:
+                800;
+        }
+
+
+        /* =====================================================
+           EMPTY
+           ===================================================== */
+
+        .empty {
+
+            background:
+                white;
+
+            border-radius:
+                17px;
+
+            padding:
+                32px 20px;
+
+            text-align:
+                center;
+
+            color:
+                var(--muted);
+        }
+
+
+        .empty-icon {
+
+            font-size:
+                32px;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .empty-title {
+
+            color:
+                var(--text);
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                5px;
+        }
+
+
+        /* =====================================================
+           REGELN
+           ===================================================== */
+
+        .info {
+
+            background:
+                white;
+
+            border-radius:
+                13px;
+
+            padding:
+                14px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.5;
+
+            margin-bottom:
+                14px;
+        }
+
+
+        .rule-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    minmax(0,1fr)
+                );
+
+            gap:
+                8px;
+        }
+
+
+        .rule-name {
+
+            grid-column:
+                1 / -1;
+        }
+
+
+        .rule-actions {
+
+            display:
+                grid;
+
+            gap:
+                8px;
+
+            margin-top:
+                10px;
+        }
+
+
+        .rules-back {
+
+            margin-bottom:
+                14px;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+           ===================================================== */
+
+        .bottom-nav {
+
+            position:
+                fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height:
+                calc(
+                    64px +
+                    env(safe-area-inset-bottom)
+                );
+
+            padding-bottom:
+                env(safe-area-inset-bottom);
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .97
+                );
+
+            border-top:
+                1px solid
+                var(--border);
+
+            z-index:
+                200;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+        }
+
+
+        .nav-button {
+
+            border:
+                none;
+
+            background:
+                transparent;
+
+            color:
+                #6b7280;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+        }
+
+
+        .nav-button.active {
+
+            color:
+                var(--dark);
+        }
+
+
+        .nav-icon {
+
+            display:
+                block;
+
+            font-size:
+                20px;
+
+            margin-bottom:
+                2px;
+        }
+
+
+        /* =====================================================
+           DESKTOP
+           ===================================================== */
+
+        @media (min-width: 700px) {
+
+            body {
+
+                padding-bottom:
+                    20px;
+            }
+
+
+            .bottom-nav {
+
+                display:
+                    none;
+            }
+
+
+            .form-grid {
+
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
+            }
+
+
+            .form-actions {
+
+                grid-column:
+                    1 / -1;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .rule-grid {
+
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+    <div class="header-inner">
+
+        <h1>
+            Aktienbewertung
+        </h1>
+
+        <div class="subtitle">
+            Value &amp; Growth Scanner
+        </div>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- =====================================================
+         AKTIEN
+         ===================================================== -->
+
+    <section
+        id="stocks-view"
+        class="view active"
+    >
+
+
+        <button
+            id="rules-top-button"
+            class="secondary"
+            type="button"
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:7px;
+                margin-bottom:14px;
+            "
+        >
+            ⚙️ Bewertungsregeln
+        </button>
+
+
+        <button
+            id="add-stock-button"
+            class="primary"
+            type="button"
+        >
+            + Aktie hinzufügen
+        </button>
+
+
+        <!-- =================================================
+             AKTIENFORMULAR
+             ================================================= -->
+
+        <div
+            id="stock-form-card"
+            class="card form-card"
+        >
+
+            <h2
+                id="stock-form-title"
+                class="card-title"
+            >
+                Neue Aktie
+            </h2>
+
+
+            <form
+                id="stock-form"
+                class="form-grid"
+            >
+
+
+                <div class="field">
+
+                    <label for="stock-name">
+                        Aktie
+                    </label>
+
+                    <input
+                        id="stock-name"
+                        type="text"
+                        placeholder="z. B. Nemetschek"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="stock-branch">
+                        Branche
+                    </label>
+
+                    <select
+                        id="stock-branch"
+                        required
+                    >
+
+                        <option value="">
+                            Bitte auswählen
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="stock-kurs">
+                        Aktueller Kurs
+                    </label>
+
+                    <input
+                        id="stock-kurs"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="z. B. 60,00"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="stock-eps-2025">
+                        EPS 2025
+                    </label>
+
+                    <input
+                        id="stock-eps-2025"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="z. B. 2,28"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="stock-eps-2026">
+                        EPS 2026
+                    </label>
+
+                    <input
+                        id="stock-eps-2026"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="z. B. 2,79"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        class="primary"
+                        type="submit"
+                    >
+                        Speichern
+                    </button>
+
+
+                    <button
+                        id="delete-stock-button"
+                        class="danger"
+                        type="button"
+                        style="display:none;"
+                    >
+                        Aktie löschen
+                    </button>
+
+
+                    <button
+                        id="cancel-stock-button"
+                        class="secondary"
+                        type="button"
+                    >
+                        Abbrechen
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             AKTIENÜBERSICHT
+             ================================================= -->
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Mein Aktiendepot
+            </h2>
+
+            <div
+                id="stock-count"
+                class="count"
+            >
+                0 Werte
+            </div>
+
+        </div>
+
+
+        <div
+            id="stocks-container"
+            class="stocks"
+        ></div>
+
+
+        <div
+            id="stocks-empty"
+            class="empty"
+            style="display:none;"
+        >
+
+            <div class="empty-icon">
+                📊
+            </div>
+
+            <div class="empty-title">
+                Noch keine Aktien
+            </div>
+
+            <div>
+                Füge deine erste Aktie hinzu.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BEWERTUNGSREGELN
+         ===================================================== -->
+
+    <section
+        id="rules-view"
+        class="view"
+    >
+
+
+        <button
+            id="rules-back-button"
+            class="secondary rules-back"
+            type="button"
+        >
+            ← Zurück zu meinem Aktiendepot
+        </button>
+
+
+        <div class="info">
+
+            Die Bewertungsregeln werden ausschließlich
+            auf diesem Gerät gespeichert.
+
+            <br><br>
+
+            Die Grenzwerte müssen aufsteigend sein:
+
+            <strong>
+                Grün &lt; Gelb &lt; Orange
+            </strong>
+
+        </div>
+
+
+        <!-- =================================================
+             NEUE BRANCHE
+             ================================================= -->
+
+        <div class="card">
+
+            <h2 class="card-title">
+                Neue Branche hinzufügen
+            </h2>
+
+
+            <form
+                id="new-branch-form"
+            >
+
+                <div class="rule-grid">
+
+
+                    <div
+                        class="field rule-name"
+                    >
+
+                        <label for="new-branch-name">
+                            Branchenname
+                        </label>
+
+                        <input
+                            id="new-branch-name"
+                            type="text"
+                            placeholder="z. B. Software"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="new-kgv-green">
+                            KGV Grün
+                        </label>
+
+                        <input
+                            id="new-kgv-green"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="24"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="new-kgv-yellow">
+                            KGV Gelb
+                        </label>
+
+                        <input
+                            id="new-kgv-yellow"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="30"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="new-kgv-orange">
+                            KGV Orange
+                        </label>
+
+                        <input
+                            id="new-kgv-orange"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="35"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="new-peg-green">
+                            PEG Grün
+                        </label>
+
+                        <input
+                            id="new-peg-green"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="1,50"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="new-peg-yellow">
+                            PEG Gelb
+                        </label>
+
+                        <input
+                            id="new-peg-yellow"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="2,00"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="new-peg-orange">
+                            PEG Orange
+                        </label>
+
+                        <input
+                            id="new-peg-orange"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="2,50"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    type="submit"
+                    style="margin-top:12px;"
+                >
+                    Branche hinzufügen
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             BESTEHENDE BRANCHEN
+             ================================================= -->
+
+        <div
+            id="branches-container"
+        ></div>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================================
+     MOBILE NAVIGATION
+     ========================================================= -->
+
+<nav class="bottom-nav">
+
+
+    <button
+        id="nav-stocks"
+        class="nav-button active"
+        type="button"
+    >
+
+        <span class="nav-icon">
+            📊
+        </span>
+
+        Aktien
+
+    </button>
+
+
+    <button
+        id="nav-rules"
+        class="nav-button"
+        type="button"
+    >
+
+        <span class="nav-icon">
+            ⚙️
+        </span>
+
+        Regeln
+
+    </button>
+
+
+</nav>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script src="app.js"></script>
+
+
+<!-- =========================================================
+     SERVICE WORKER
+     ========================================================= -->
+
+<script>
+
+if (
+    "serviceWorker" in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            navigator.serviceWorker
+                .register(
+                    "service-worker.js"
+                )
+                .then(
+                    function(registration) {
+
+                        console.log(
+                            "Service Worker registriert:",
+                            registration.scope
+                        );
+
+                    }
+                )
+                .catch(
+                    function(error) {
+
+                        console.error(
+                            "Service Worker konnte nicht registriert werden:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

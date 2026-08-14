@@ -1,0 +1,13 @@
+{
+  "name": "Aktienbewertung",
+  "short_name": "Aktien",
+  "description": "Persönliche Aktienbewertung mit lokaler Datenbank",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f3f4f6",
+  "theme_color": "#111827",
+  "lang": "de",
+  "icons": []
+}
