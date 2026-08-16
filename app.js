@@ -240,7 +240,6 @@ function openDatabase() {
                             }
                         );
                     }
-
                 };
 
 
@@ -329,14 +328,12 @@ async function getBranches() {
                 );
 
 
-            const store =
-                transaction.objectStore(
-                    BRANCHES_STORE
-                );
-
-
             const request =
-                store.getAll();
+                transaction
+                    .objectStore(
+                        BRANCHES_STORE
+                    )
+                    .getAll();
 
 
             request.onsuccess =
@@ -382,38 +379,34 @@ async function addBranch(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     BRANCHES_STORE,
                     "readwrite"
-                );
+                )
+                .objectStore(
+                    BRANCHES_STORE
+                )
+                .add({
 
+                    name:
+                        branch.name.trim(),
 
-            const request =
-                transaction
-                    .objectStore(
-                        BRANCHES_STORE
-                    )
-                    .add({
+                    kgv_gruen:
+                        Number(
+                            branch.kgv_gruen
+                        ),
 
-                        name:
-                            branch.name.trim(),
+                    kgv_gelb:
+                        Number(
+                            branch.kgv_gelb
+                        ),
 
-                        kgv_gruen:
-                            Number(
-                                branch.kgv_gruen
-                            ),
-
-                        kgv_gelb:
-                            Number(
-                                branch.kgv_gelb
-                            ),
-
-                        kgv_orange:
-                            Number(
-                                branch.kgv_orange
-                            )
-                    });
+                    kgv_orange:
+                        Number(
+                            branch.kgv_orange
+                        )
+                });
 
 
             request.onsuccess =
@@ -462,43 +455,39 @@ async function updateBranch(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     BRANCHES_STORE,
                     "readwrite"
-                );
+                )
+                .objectStore(
+                    BRANCHES_STORE
+                )
+                .put({
 
+                    id:
+                        Number(
+                            branch.id
+                        ),
 
-            const request =
-                transaction
-                    .objectStore(
-                        BRANCHES_STORE
-                    )
-                    .put({
+                    name:
+                        branch.name.trim(),
 
-                        id:
-                            Number(
-                                branch.id
-                            ),
+                    kgv_gruen:
+                        Number(
+                            branch.kgv_gruen
+                        ),
 
-                        name:
-                            branch.name.trim(),
+                    kgv_gelb:
+                        Number(
+                            branch.kgv_gelb
+                        ),
 
-                        kgv_gruen:
-                            Number(
-                                branch.kgv_gruen
-                            ),
-
-                        kgv_gelb:
-                            Number(
-                                branch.kgv_gelb
-                            ),
-
-                        kgv_orange:
-                            Number(
-                                branch.kgv_orange
-                            )
-                    });
+                    kgv_orange:
+                        Number(
+                            branch.kgv_orange
+                        )
+                });
 
 
             request.onsuccess =
@@ -551,23 +540,19 @@ async function deleteBranch(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     BRANCHES_STORE,
                     "readwrite"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        BRANCHES_STORE
+                )
+                .objectStore(
+                    BRANCHES_STORE
+                )
+                .delete(
+                    Number(
+                        branchId
                     )
-                    .delete(
-                        Number(
-                            branchId
-                        )
-                    );
+                );
 
 
             request.onsuccess =
@@ -597,19 +582,15 @@ async function getStocks() {
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     STOCKS_STORE,
                     "readonly"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        STOCKS_STORE
-                    )
-                    .getAll();
+                )
+                .objectStore(
+                    STOCKS_STORE
+                )
+                .getAll();
 
 
             request.onsuccess =
@@ -861,7 +842,6 @@ async function deleteStock(
 // BEWERTUNGSLOGIK
 // ============================================================
 
-
 function berechneKgv(
     kurs,
     eps
@@ -936,24 +916,15 @@ function berechneGewinnwachstum(
 
 
 /*
- * Wachstumsbereinigte Bewertungskennzahl
+ * Bewertungskennzahl:
  *
  * Basis-KGV / (1 + Gewinnwachstum)
  *
- * Beispiel:
+ * Positives Wachstum reduziert
+ * die Bewertungskennzahl.
  *
- * Basis-KGV = 20
- * Wachstum = +20 %
- *
- * 20 / 1,20 = 16,67
- *
- * Basis-KGV = 20
- * Wachstum = -20 %
- *
- * 20 / 0,80 = 25,00
- *
- * Bei -100 % oder schlechter ist
- * die Kennzahl nicht sinnvoll berechenbar.
+ * Negatives Wachstum erhöht
+ * die Bewertungskennzahl.
  */
 
 function berechneBewertungskennzahl(
@@ -1043,6 +1014,94 @@ function berechneEntscheidung(
 }
 
 
+// ============================================================
+// TOP-KAUFKURS
+// ============================================================
+
+function berechneTopKaufkurs(
+    epsFolgejahr,
+    branch
+) {
+
+    const eps =
+        Number(
+            epsFolgejahr
+        );
+
+
+    const kgvGruen =
+        Number(
+            branch.kgv_gruen
+        );
+
+
+    if (
+        eps <= 0
+        ||
+        kgvGruen <= 0
+    ) {
+
+        return null;
+    }
+
+
+    return eps * kgvGruen;
+}
+
+
+// ============================================================
+// PROZENTUALER ABSTAND ZUM TOP-KAUFKURS
+// ============================================================
+
+function berechneAbstandTopKaufkurs(
+    kurs,
+    topKaufkurs
+) {
+
+    const aktuellerKurs =
+        Number(
+            kurs
+        );
+
+
+    const zielkurs =
+        Number(
+            topKaufkurs
+        );
+
+
+    if (
+        !Number.isFinite(
+            aktuellerKurs
+        )
+        ||
+        !Number.isFinite(
+            zielkurs
+        )
+        ||
+        zielkurs <= 0
+    ) {
+
+        return null;
+    }
+
+
+    return (
+        (
+            aktuellerKurs
+            -
+            zielkurs
+        )
+        /
+        zielkurs
+    );
+}
+
+
+// ============================================================
+// AKTIE BEWERTEN
+// ============================================================
+
 function bewerteAktie(
     stock,
     branch
@@ -1084,15 +1143,17 @@ function bewerteAktie(
 
 
     const topKaufkurs =
-        stock.eps_2026 > 0
-            ? Number(
-                stock.eps_2026
-            )
-            *
-            Number(
-                branch.kgv_gruen
-            )
-            : null;
+        berechneTopKaufkurs(
+            stock.eps_2026,
+            branch
+        );
+
+
+    const abstandTopKaufkurs =
+        berechneAbstandTopKaufkurs(
+            stock.kurs,
+            topKaufkurs
+        );
 
 
     const entscheidung =
@@ -1121,13 +1182,15 @@ function bewerteAktie(
 
         topKaufkurs,
 
+        abstandTopKaufkurs,
+
         entscheidung
     };
 }
 
 
 // ============================================================
-// AKTIEN RENDERN
+// AKTIEN RENDERN UND SORTIEREN
 // ============================================================
 
 async function renderStocks() {
@@ -1190,6 +1253,9 @@ async function renderStocks() {
                         topKaufkurs:
                             null,
 
+                        abstandTopKaufkurs:
+                            null,
+
                         entscheidung:
                             "Nicht bewertbar"
                     };
@@ -1204,17 +1270,52 @@ async function renderStocks() {
         );
 
 
+    /*
+     * SORTIERUNG:
+     *
+     * Kleinster prozentualer Abstand
+     * zum Top-Kaufkurs zuerst.
+     *
+     * Beispiel:
+     *
+     * -25 %
+     * -15 %
+     *  -3 %
+     *  +2 %
+     * +12 %
+     *
+     * Aktien unterhalb des
+     * Top-Kaufkurses stehen damit
+     * automatisch ganz oben.
+     *
+     * Aktien ohne berechenbaren
+     * Top-Kaufkurs kommen ans Ende.
+     */
+
     evaluated.sort(
-        (a, b) =>
-            (
-                b.bewertungskennzahl
-                ?? -Infinity
-            )
-            -
-            (
-                a.bewertungskennzahl
-                ?? -Infinity
-            )
+        function(a, b) {
+
+            const abstandA =
+                a.abstandTopKaufkurs !== null
+                    ? Number(
+                        a.abstandTopKaufkurs
+                    )
+                    : Infinity;
+
+
+            const abstandB =
+                b.abstandTopKaufkurs !== null
+                    ? Number(
+                        b.abstandTopKaufkurs
+                    )
+                    : Infinity;
+
+
+            return (
+                abstandA -
+                abstandB
+            );
+        }
     );
 
 
@@ -1312,29 +1413,17 @@ function renderStockCard(
     }
 
 
-    let kennzahlClass =
-        "score-0";
+    const abstandPositiv =
+        stock.abstandTopKaufkurs !== null
+        &&
+        stock.abstandTopKaufkurs > 0;
 
 
-    if (
-        stock.bewertungskennzahl !== null
-    ) {
-
-        const branchKgv =
-            Number(
-                stock.bewertungskennzahl
-            );
-
-
-        /*
-         * Für die farbliche Darstellung
-         * verwenden wir hier die vier
-         * Bewertungsstufen.
-         */
-
-        const branch =
-            null;
-    }
+    const abstandKlasse =
+        !abstandPositiv &&
+        stock.abstandTopKaufkurs !== null
+            ? "buy-good"
+            : "";
 
 
     return `
@@ -1360,11 +1449,9 @@ function renderStockCard(
 
 
                 <div class="stock-price">
-
                     ${formatEuro(
                         stock.kurs
                     )}
-
                 </div>
 
             </div>
@@ -1385,10 +1472,9 @@ function renderStockCard(
             <div class="metrics">
 
 
-                <div class="
-                    metric
-                    ${kennzahlClass}
-                ">
+                <!-- Bewertungskennzahl -->
+
+                <div class="metric">
 
                     <div class="metric-label">
                         Bewertungskennzahl
@@ -1409,7 +1495,9 @@ function renderStockCard(
                 </div>
 
 
-                <div class="metric buy-good">
+                <!-- Top-Kaufkurs -->
+
+                <div class="metric">
 
                     <div class="metric-label">
                         Top-Kaufkurs
@@ -1429,6 +1517,34 @@ function renderStockCard(
 
                 </div>
 
+
+                <!-- Abstand -->
+
+                <div class="
+                    metric
+                    ${abstandKlasse}
+                ">
+
+                    <div class="metric-label">
+                        Abstand Top-Kaufkurs
+                    </div>
+
+                    <div class="metric-value">
+
+                        ${
+                            stock.abstandTopKaufkurs !== null
+                                ? formatPercent(
+                                    stock.abstandTopKaufkurs
+                                )
+                                : "—"
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- Gewinnwachstum -->
 
                 <div class="metric">
 
@@ -1450,6 +1566,8 @@ function renderStockCard(
 
                 </div>
 
+
+                <!-- Basis-KGV -->
 
                 <div class="metric">
 
@@ -1957,7 +2075,6 @@ function renderRuleCard(
 
             <div class="rule-grid">
 
-
                 <div
                     class="
                         field
@@ -2028,7 +2145,6 @@ function renderRuleCard(
                     >
 
                 </div>
-
 
             </div>
 
