@@ -2,8 +2,23 @@
 
 
 // ============================================================
-// AKTIENBEWERTUNG - KOMPLETT LOKAL
+// AKTIENBEWERTUNG - LOKALE PWA
+// Buffett-orientierte Bewertungslogik
+//
+// Bewertungskennzahl:
+// Basis-KGV / (1 + Gewinnwachstum)
+//
+// Entscheidung:
+// <= Grün        -> Kauf
+// <= Gelb        -> Aufbau
+// <= Orange      -> Beobachten
+// > Orange       -> Kein Kauf
+//
+// Sortierung:
+// Prozentualer Abstand des aktuellen Kurses
+// zum Top-Kaufkurs, aufsteigend.
 // ============================================================
+
 
 const DB_NAME = "AktienbewertungMobile";
 const DB_VERSION = 1;
@@ -21,34 +36,6 @@ let editingStockId = null;
 const DEFAULT_BRANCHES = [
 
     {
-        name: "Industrie",
-        kgv_gruen: 14,
-        kgv_gelb: 18,
-        kgv_orange: 22
-    },
-
-    {
-        name: "Finanzen",
-        kgv_gruen: 12,
-        kgv_gelb: 15,
-        kgv_orange: 18
-    },
-
-    {
-        name: "Versicherung",
-        kgv_gruen: 12,
-        kgv_gelb: 15,
-        kgv_orange: 18
-    },
-
-    {
-        name: "Rüstung",
-        kgv_gruen: 18,
-        kgv_gelb: 24,
-        kgv_orange: 30
-    },
-
-    {
         name: "Automobil",
         kgv_gruen: 9,
         kgv_gelb: 12,
@@ -56,10 +43,24 @@ const DEFAULT_BRANCHES = [
     },
 
     {
-        name: "IT + Software",
-        kgv_gruen: 24,
-        kgv_gelb: 30,
-        kgv_orange: 35
+        name: "Börsen / Finanzinfrastruktur",
+        kgv_gruen: 18,
+        kgv_gelb: 23,
+        kgv_orange: 28
+    },
+
+    {
+        name: "Chemie",
+        kgv_gruen: 12,
+        kgv_gelb: 16,
+        kgv_orange: 20
+    },
+
+    {
+        name: "Einzelhandel",
+        kgv_gruen: 12,
+        kgv_gelb: 16,
+        kgv_orange: 20
     },
 
     {
@@ -70,23 +71,79 @@ const DEFAULT_BRANCHES = [
     },
 
     {
-        name: "Konsum",
-        kgv_gruen: 19,
-        kgv_gelb: 24,
-        kgv_orange: 28
+        name: "Finanzen",
+        kgv_gruen: 10,
+        kgv_gelb: 13,
+        kgv_orange: 16
     },
 
     {
-        name: "Logistik",
+        name: "Getränke / Marken-Konsum",
+        kgv_gruen: 17,
+        kgv_gelb: 21,
+        kgv_orange: 25
+    },
+
+    {
+        name: "Grundstoffe / Rohstoffe",
+        kgv_gruen: 10,
+        kgv_gelb: 14,
+        kgv_orange: 18
+    },
+
+    {
+        name: "Halbleiter",
+        kgv_gruen: 15,
+        kgv_gelb: 20,
+        kgv_orange: 25
+    },
+
+    {
+        name: "Industrie",
         kgv_gruen: 14,
         kgv_gelb: 18,
         kgv_orange: 22
     },
 
     {
-        name: "Halbleiter",
+        name: "IT + Software",
+        kgv_gruen: 20,
+        kgv_gelb: 25,
+        kgv_orange: 30
+    },
+
+    {
+        name: "Konsum",
+        kgv_gruen: 17,
+        kgv_gelb: 22,
+        kgv_orange: 27
+    },
+
+    {
+        name: "Logistik",
+        kgv_gruen: 12,
+        kgv_gelb: 16,
+        kgv_orange: 20
+    },
+
+    {
+        name: "Luxus",
         kgv_gruen: 18,
-        kgv_gelb: 24,
+        kgv_gelb: 23,
+        kgv_orange: 28
+    },
+
+    {
+        name: "Medien / Unterhaltung",
+        kgv_gruen: 12,
+        kgv_gelb: 16,
+        kgv_orange: 20
+    },
+
+    {
+        name: "Medizintechnik",
+        kgv_gruen: 20,
+        kgv_gelb: 25,
         kgv_orange: 30
     },
 
@@ -98,10 +155,10 @@ const DEFAULT_BRANCHES = [
     },
 
     {
-        name: "Medizintechnik",
-        kgv_gruen: 20,
-        kgv_gelb: 25,
-        kgv_orange: 30
+        name: "Rüstung",
+        kgv_gruen: 15,
+        kgv_gelb: 20,
+        kgv_orange: 25
     },
 
     {
@@ -112,52 +169,17 @@ const DEFAULT_BRANCHES = [
     },
 
     {
-        name: "Chemie",
-        kgv_gruen: 12,
-        kgv_gelb: 16,
-        kgv_orange: 20
-    },
-
-    {
-        name: "Medien / Unterhaltung",
-        kgv_gruen: 15,
-        kgv_gelb: 20,
-        kgv_orange: 25
-    },
-
-    {
-        name: "Börsen / Finanzinfrastruktur",
-        kgv_gruen: 20,
-        kgv_gelb: 25,
-        kgv_orange: 30
-    },
-
-    {
-        name: "Zahlungsdienstleister",
-        kgv_gruen: 20,
-        kgv_gelb: 27,
-        kgv_orange: 32
-    },
-
-    {
-        name: "Luxus",
-        kgv_gruen: 20,
-        kgv_gelb: 25,
-        kgv_orange: 30
-    },
-
-    {
-        name: "Einzelhandel",
-        kgv_gruen: 12,
-        kgv_gelb: 16,
-        kgv_orange: 20
-    },
-
-    {
-        name: "Getränke / Marken-Konsum",
+        name: "Unternehmensdienstleistungen / Informationsdienstleistungen",
         kgv_gruen: 18,
         kgv_gelb: 23,
         kgv_orange: 28
+    },
+
+    {
+        name: "Versicherung",
+        kgv_gruen: 12,
+        kgv_gelb: 15,
+        kgv_orange: 18
     },
 
     {
@@ -168,10 +190,10 @@ const DEFAULT_BRANCHES = [
     },
 
     {
-        name: "Wachstumsunternehmen",
-        kgv_gruen: 24,
-        kgv_gelb: 30,
-        kgv_orange: 35
+        name: "Zahlungsdienstleister",
+        kgv_gruen: 18,
+        kgv_gelb: 24,
+        kgv_orange: 28
     }
 
 ];
@@ -273,16 +295,26 @@ async function initializeDatabase() {
 
     await openDatabase();
 
-    const branches =
+
+    const existingBranches =
         await getBranches();
 
 
-    if (
-        branches.length > 0
-    ) {
+    /*
+     * Neue Standardbranchen ergänzen,
+     * ohne bereits vorhandene individuelle
+     * Regeln zu überschreiben.
+     */
 
-        return;
-    }
+    const existingNames =
+        new Set(
+            existingBranches.map(
+                branch =>
+                    branch.name
+                        .trim()
+                        .toLowerCase()
+            )
+        );
 
 
     for (
@@ -290,19 +322,32 @@ async function initializeDatabase() {
         of DEFAULT_BRANCHES
     ) {
 
-        try {
+        const key =
+            branch.name
+                .trim()
+                .toLowerCase();
 
-            await addBranch(
-                branch
-            );
 
-        } catch(error) {
+        if (
+            !existingNames.has(
+                key
+            )
+        ) {
 
-            console.warn(
-                "Branche konnte nicht angelegt werden:",
-                branch.name,
-                error
-            );
+            try {
+
+                await addBranch(
+                    branch
+                );
+
+            } catch(error) {
+
+                console.warn(
+                    "Branche konnte nicht angelegt werden:",
+                    branch.name,
+                    error
+                );
+            }
         }
     }
 }
@@ -321,19 +366,15 @@ async function getBranches() {
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     BRANCHES_STORE,
                     "readonly"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        BRANCHES_STORE
-                    )
-                    .getAll();
+                )
+                .objectStore(
+                    BRANCHES_STORE
+                )
+                .getAll();
 
 
             request.onsuccess =
@@ -491,13 +532,15 @@ async function updateBranch(
 
 
             request.onsuccess =
-                () => resolve();
+                () =>
+                    resolve();
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -556,13 +599,15 @@ async function deleteBranch(
 
 
             request.onsuccess =
-                () => resolve();
+                () =>
+                    resolve();
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -783,7 +828,8 @@ async function updateStock(
 
 
             request.onsuccess =
-                () => resolve();
+                () =>
+                    resolve();
 
 
             request.onerror =
@@ -824,7 +870,8 @@ async function deleteStock(
 
 
             request.onsuccess =
-                () => resolve();
+                () =>
+                    resolve();
 
 
             request.onerror =
@@ -916,15 +963,12 @@ function berechneGewinnwachstum(
 
 
 /*
- * Bewertungskennzahl:
+ * Buffett-orientierte Bewertungskennzahl:
  *
  * Basis-KGV / (1 + Gewinnwachstum)
  *
- * Positives Wachstum reduziert
- * die Bewertungskennzahl.
- *
- * Negatives Wachstum erhöht
- * die Bewertungskennzahl.
+ * Mehr Wachstum -> niedrigere Kennzahl
+ * Weniger Wachstum -> höhere Kennzahl
  */
 
 function berechneBewertungskennzahl(
@@ -1036,8 +1080,7 @@ function berechneTopKaufkurs(
 
 
     if (
-        eps <= 0
-        ||
+        eps <= 0 ||
         kgvGruen <= 0
     ) {
 
@@ -1190,7 +1233,7 @@ function bewerteAktie(
 
 
 // ============================================================
-// AKTIEN RENDERN UND SORTIEREN
+// AKTIEN RENDERN / SORTIEREN
 // ============================================================
 
 async function renderStocks() {
@@ -1271,7 +1314,7 @@ async function renderStocks() {
 
 
     /*
-     * SORTIERUNG:
+     * Sortierung:
      *
      * Kleinster prozentualer Abstand
      * zum Top-Kaufkurs zuerst.
@@ -1280,16 +1323,13 @@ async function renderStocks() {
      *
      * -25 %
      * -15 %
-     *  -3 %
-     *  +2 %
-     * +12 %
+     *  -5 %
+     *  +3 %
+     * +10 %
      *
-     * Aktien unterhalb des
+     * Aktien unterhalb ihres
      * Top-Kaufkurses stehen damit
      * automatisch ganz oben.
-     *
-     * Aktien ohne berechenbaren
-     * Top-Kaufkurs kommen ans Ende.
      */
 
     evaluated.sort(
@@ -1413,15 +1453,10 @@ function renderStockCard(
     }
 
 
-    const abstandPositiv =
+    const abstandKlasse =
         stock.abstandTopKaufkurs !== null
         &&
-        stock.abstandTopKaufkurs > 0;
-
-
-    const abstandKlasse =
-        !abstandPositiv &&
-        stock.abstandTopKaufkurs !== null
+        stock.abstandTopKaufkurs <= 0
             ? "buy-good"
             : "";
 
@@ -1472,8 +1507,6 @@ function renderStockCard(
             <div class="metrics">
 
 
-                <!-- Bewertungskennzahl -->
-
                 <div class="metric">
 
                     <div class="metric-label">
@@ -1495,8 +1528,6 @@ function renderStockCard(
                 </div>
 
 
-                <!-- Top-Kaufkurs -->
-
                 <div class="metric">
 
                     <div class="metric-label">
@@ -1517,8 +1548,6 @@ function renderStockCard(
 
                 </div>
 
-
-                <!-- Abstand -->
 
                 <div class="
                     metric
@@ -1544,8 +1573,6 @@ function renderStockCard(
                 </div>
 
 
-                <!-- Gewinnwachstum -->
-
                 <div class="metric">
 
                     <div class="metric-label">
@@ -1566,8 +1593,6 @@ function renderStockCard(
 
                 </div>
 
-
-                <!-- Basis-KGV -->
 
                 <div class="metric">
 

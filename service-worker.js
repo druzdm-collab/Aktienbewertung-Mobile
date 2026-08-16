@@ -1,4 +1,4 @@
-const CACHE_NAME = "aktienbewertung-v4";
+const CACHE_NAME = "aktienbewertung-v5";
 
 
 const APP_FILES = [
