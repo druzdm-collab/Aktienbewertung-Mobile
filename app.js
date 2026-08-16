@@ -1,13 +1,9 @@
-// ============================================================
-// AKTIENBEWERTUNG - KOMPLETT LOKAL
-// Eine Datei: Datenbank + Logik + Oberfläche
-// Keine MK/JD-Logik
-// Keine externen JS-Dateien
-// ============================================================
-
-
 "use strict";
 
+
+// ============================================================
+// AKTIENBEWERTUNG - KOMPLETT LOKAL
+// ============================================================
 
 const DB_NAME = "AktienbewertungMobile";
 const DB_VERSION = 1;
@@ -28,227 +24,161 @@ const DEFAULT_BRANCHES = [
         name: "Industrie",
         kgv_gruen: 14,
         kgv_gelb: 18,
-        kgv_orange: 22,
-        peg_gruen: 1.30,
-        peg_gelb: 1.80,
-        peg_orange: 2.20
+        kgv_orange: 22
     },
 
     {
         name: "Finanzen",
         kgv_gruen: 12,
         kgv_gelb: 15,
-        kgv_orange: 18,
-        peg_gruen: 1.20,
-        peg_gelb: 1.70,
-        peg_orange: 2.00
+        kgv_orange: 18
     },
 
     {
         name: "Versicherung",
         kgv_gruen: 12,
         kgv_gelb: 15,
-        kgv_orange: 18,
-        peg_gruen: 1.20,
-        peg_gelb: 1.70,
-        peg_orange: 2.00
+        kgv_orange: 18
     },
 
     {
         name: "Rüstung",
         kgv_gruen: 18,
         kgv_gelb: 24,
-        kgv_orange: 30,
-        peg_gruen: 1.50,
-        peg_gelb: 2.00,
-        peg_orange: 2.50
+        kgv_orange: 30
     },
 
     {
         name: "Automobil",
         kgv_gruen: 9,
         kgv_gelb: 12,
-        kgv_orange: 15,
-        peg_gruen: 1.00,
-        peg_gelb: 1.50,
-        peg_orange: 2.00
+        kgv_orange: 15
     },
 
     {
         name: "IT + Software",
         kgv_gruen: 24,
         kgv_gelb: 30,
-        kgv_orange: 35,
-        peg_gruen: 1.50,
-        peg_gelb: 2.00,
-        peg_orange: 2.50
+        kgv_orange: 35
     },
 
     {
         name: "Energie",
         kgv_gruen: 10,
         kgv_gelb: 14,
-        kgv_orange: 18,
-        peg_gruen: 1.00,
-        peg_gelb: 1.50,
-        peg_orange: 2.00
+        kgv_orange: 18
     },
 
     {
         name: "Konsum",
         kgv_gruen: 19,
         kgv_gelb: 24,
-        kgv_orange: 28,
-        peg_gruen: 1.30,
-        peg_gelb: 1.80,
-        peg_orange: 2.20
+        kgv_orange: 28
     },
 
     {
         name: "Logistik",
         kgv_gruen: 14,
         kgv_gelb: 18,
-        kgv_orange: 22,
-        peg_gruen: 1.20,
-        peg_gelb: 1.70,
-        peg_orange: 2.10
+        kgv_orange: 22
     },
 
     {
         name: "Halbleiter",
         kgv_gruen: 18,
         kgv_gelb: 24,
-        kgv_orange: 30,
-        peg_gruen: 1.30,
-        peg_gelb: 1.80,
-        peg_orange: 2.30
+        kgv_orange: 30
     },
 
     {
         name: "Pharma",
         kgv_gruen: 14,
         kgv_gelb: 18,
-        kgv_orange: 22,
-        peg_gruen: 1.20,
-        peg_gelb: 1.70,
-        peg_orange: 2.10
+        kgv_orange: 22
     },
 
     {
         name: "Medizintechnik",
         kgv_gruen: 20,
         kgv_gelb: 25,
-        kgv_orange: 30,
-        peg_gruen: 1.40,
-        peg_gelb: 1.90,
-        peg_orange: 2.30
+        kgv_orange: 30
     },
 
     {
         name: "Telekommunikation",
         kgv_gruen: 11,
         kgv_gelb: 15,
-        kgv_orange: 18,
-        peg_gruen: 1.10,
-        peg_gelb: 1.60,
-        peg_orange: 2.00
+        kgv_orange: 18
     },
 
     {
         name: "Chemie",
         kgv_gruen: 12,
         kgv_gelb: 16,
-        kgv_orange: 20,
-        peg_gruen: 1.20,
-        peg_gelb: 1.70,
-        peg_orange: 2.10
+        kgv_orange: 20
     },
 
     {
         name: "Medien / Unterhaltung",
         kgv_gruen: 15,
         kgv_gelb: 20,
-        kgv_orange: 25,
-        peg_gruen: 1.30,
-        peg_gelb: 1.80,
-        peg_orange: 2.20
+        kgv_orange: 25
     },
 
     {
         name: "Börsen / Finanzinfrastruktur",
         kgv_gruen: 20,
         kgv_gelb: 25,
-        kgv_orange: 30,
-        peg_gruen: 1.50,
-        peg_gelb: 2.00,
-        peg_orange: 2.50
+        kgv_orange: 30
     },
 
     {
         name: "Zahlungsdienstleister",
         kgv_gruen: 20,
         kgv_gelb: 27,
-        kgv_orange: 32,
-        peg_gruen: 1.50,
-        peg_gelb: 2.00,
-        peg_orange: 2.50
+        kgv_orange: 32
     },
 
     {
         name: "Luxus",
         kgv_gruen: 20,
         kgv_gelb: 25,
-        kgv_orange: 30,
-        peg_gruen: 1.50,
-        peg_gelb: 2.00,
-        peg_orange: 2.50
+        kgv_orange: 30
     },
 
     {
         name: "Einzelhandel",
         kgv_gruen: 12,
         kgv_gelb: 16,
-        kgv_orange: 20,
-        peg_gruen: 1.10,
-        peg_gelb: 1.60,
-        peg_orange: 2.00
+        kgv_orange: 20
     },
 
     {
         name: "Getränke / Marken-Konsum",
         kgv_gruen: 18,
         kgv_gelb: 23,
-        kgv_orange: 28,
-        peg_gruen: 1.40,
-        peg_gelb: 1.90,
-        peg_orange: 2.30
+        kgv_orange: 28
     },
 
     {
         name: "Versorger",
         kgv_gruen: 10,
         kgv_gelb: 14,
-        kgv_orange: 17,
-        peg_gruen: 1.00,
-        peg_gelb: 1.50,
-        peg_orange: 2.00
+        kgv_orange: 17
     },
 
     {
         name: "Wachstumsunternehmen",
         kgv_gruen: 24,
         kgv_gelb: 30,
-        kgv_orange: 35,
-        peg_gruen: 1.50,
-        peg_gelb: 2.00,
-        peg_orange: 2.50
+        kgv_orange: 35
     }
 
 ];
 
 
 // ============================================================
-// DATABASE
+// INDEXEDDB
 // ============================================================
 
 function openDatabase() {
@@ -271,10 +201,9 @@ function openDatabase() {
 
 
                     if (
-                        !db.objectStoreNames
-                            .contains(
-                                STOCKS_STORE
-                            )
+                        !db.objectStoreNames.contains(
+                            STOCKS_STORE
+                        )
                     ) {
 
                         db.createObjectStore(
@@ -288,10 +217,9 @@ function openDatabase() {
 
 
                     if (
-                        !db.objectStoreNames
-                            .contains(
-                                BRANCHES_STORE
-                            )
+                        !db.objectStoreNames.contains(
+                            BRANCHES_STORE
+                        )
                     ) {
 
                         const branchStore =
@@ -312,6 +240,7 @@ function openDatabase() {
                             }
                         );
                     }
+
                 };
 
 
@@ -334,6 +263,49 @@ function openDatabase() {
 
         }
     );
+}
+
+
+// ============================================================
+// INITIALISIERUNG
+// ============================================================
+
+async function initializeDatabase() {
+
+    await openDatabase();
+
+    const branches =
+        await getBranches();
+
+
+    if (
+        branches.length > 0
+    ) {
+
+        return;
+    }
+
+
+    for (
+        const branch
+        of DEFAULT_BRANCHES
+    ) {
+
+        try {
+
+            await addBranch(
+                branch
+            );
+
+        } catch(error) {
+
+            console.warn(
+                "Branche konnte nicht angelegt werden:",
+                branch.name,
+                error
+            );
+        }
+    }
 }
 
 
@@ -417,58 +389,42 @@ async function addBranch(
                 );
 
 
-            const store =
-                transaction.objectStore(
-                    BRANCHES_STORE
-                );
-
-
             const request =
-                store.add({
+                transaction
+                    .objectStore(
+                        BRANCHES_STORE
+                    )
+                    .add({
 
-                    name:
-                        branch.name.trim(),
+                        name:
+                            branch.name.trim(),
 
-                    kgv_gruen:
-                        Number(
-                            branch.kgv_gruen
-                        ),
+                        kgv_gruen:
+                            Number(
+                                branch.kgv_gruen
+                            ),
 
-                    kgv_gelb:
-                        Number(
-                            branch.kgv_gelb
-                        ),
+                        kgv_gelb:
+                            Number(
+                                branch.kgv_gelb
+                            ),
 
-                    kgv_orange:
-                        Number(
-                            branch.kgv_orange
-                        ),
-
-                    peg_gruen:
-                        Number(
-                            branch.peg_gruen
-                        ),
-
-                    peg_gelb:
-                        Number(
-                            branch.peg_gelb
-                        ),
-
-                    peg_orange:
-                        Number(
-                            branch.peg_orange
-                        )
-                });
+                        kgv_orange:
+                            Number(
+                                branch.kgv_orange
+                            )
+                    });
 
 
             request.onsuccess =
-                () => resolve(
-                    request.result
-                );
+                () =>
+                    resolve(
+                        request.result
+                    );
 
 
             request.onerror =
-                () => {
+                function() {
 
                     if (
                         request.error?.name
@@ -513,53 +469,36 @@ async function updateBranch(
                 );
 
 
-            const store =
-                transaction.objectStore(
-                    BRANCHES_STORE
-                );
-
-
             const request =
-                store.put({
+                transaction
+                    .objectStore(
+                        BRANCHES_STORE
+                    )
+                    .put({
 
-                    id:
-                        Number(
-                            branch.id
-                        ),
+                        id:
+                            Number(
+                                branch.id
+                            ),
 
-                    name:
-                        branch.name.trim(),
+                        name:
+                            branch.name.trim(),
 
-                    kgv_gruen:
-                        Number(
-                            branch.kgv_gruen
-                        ),
+                        kgv_gruen:
+                            Number(
+                                branch.kgv_gruen
+                            ),
 
-                    kgv_gelb:
-                        Number(
-                            branch.kgv_gelb
-                        ),
+                        kgv_gelb:
+                            Number(
+                                branch.kgv_gelb
+                            ),
 
-                    kgv_orange:
-                        Number(
-                            branch.kgv_orange
-                        ),
-
-                    peg_gruen:
-                        Number(
-                            branch.peg_gruen
-                        ),
-
-                    peg_gelb:
-                        Number(
-                            branch.peg_gelb
-                        ),
-
-                    peg_orange:
-                        Number(
-                            branch.peg_orange
-                        )
-                });
+                        kgv_orange:
+                            Number(
+                                branch.kgv_orange
+                            )
+                    });
 
 
             request.onsuccess =
@@ -619,18 +558,16 @@ async function deleteBranch(
                 );
 
 
-            const store =
-                transaction.objectStore(
-                    BRANCHES_STORE
-                );
-
-
             const request =
-                store.delete(
-                    Number(
-                        branchId
+                transaction
+                    .objectStore(
+                        BRANCHES_STORE
                     )
-                );
+                    .delete(
+                        Number(
+                            branchId
+                        )
+                    );
 
 
             request.onsuccess =
@@ -667,14 +604,12 @@ async function getStocks() {
                 );
 
 
-            const store =
-                transaction.objectStore(
-                    STOCKS_STORE
-                );
-
-
             const request =
-                store.getAll();
+                transaction
+                    .objectStore(
+                        STOCKS_STORE
+                    )
+                    .getAll();
 
 
             request.onsuccess =
@@ -696,9 +631,10 @@ async function getStocks() {
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -716,35 +652,34 @@ async function getStock(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     STOCKS_STORE,
                     "readonly"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        STOCKS_STORE
+                )
+                .objectStore(
+                    STOCKS_STORE
+                )
+                .get(
+                    Number(
+                        stockId
                     )
-                    .get(
-                        Number(
-                            stockId
-                        )
-                    );
+                );
 
 
             request.onsuccess =
-                () => resolve(
-                    request.result || null
-                );
+                () =>
+                    resolve(
+                        request.result ||
+                        null
+                    );
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -762,55 +697,53 @@ async function addStock(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     STOCKS_STORE,
                     "readwrite"
-                );
+                )
+                .objectStore(
+                    STOCKS_STORE
+                )
+                .add({
 
+                    name:
+                        stock.name.trim(),
 
-            const request =
-                transaction
-                    .objectStore(
-                        STOCKS_STORE
-                    )
-                    .add({
+                    branch_id:
+                        Number(
+                            stock.branch_id
+                        ),
 
-                        name:
-                            stock.name.trim(),
+                    kurs:
+                        Number(
+                            stock.kurs
+                        ),
 
-                        branch_id:
-                            Number(
-                                stock.branch_id
-                            ),
+                    eps_2025:
+                        Number(
+                            stock.eps_2025
+                        ),
 
-                        kurs:
-                            Number(
-                                stock.kurs
-                            ),
-
-                        eps_2025:
-                            Number(
-                                stock.eps_2025
-                            ),
-
-                        eps_2026:
-                            Number(
-                                stock.eps_2026
-                            )
-                    });
+                    eps_2026:
+                        Number(
+                            stock.eps_2026
+                        )
+                });
 
 
             request.onsuccess =
-                () => resolve(
-                    request.result
-                );
+                () =>
+                    resolve(
+                        request.result
+                    );
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -828,48 +761,44 @@ async function updateStock(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     STOCKS_STORE,
                     "readwrite"
-                );
+                )
+                .objectStore(
+                    STOCKS_STORE
+                )
+                .put({
 
+                    id:
+                        Number(
+                            stock.id
+                        ),
 
-            const request =
-                transaction
-                    .objectStore(
-                        STOCKS_STORE
-                    )
-                    .put({
+                    name:
+                        stock.name.trim(),
 
-                        id:
-                            Number(
-                                stock.id
-                            ),
+                    branch_id:
+                        Number(
+                            stock.branch_id
+                        ),
 
-                        name:
-                            stock.name.trim(),
+                    kurs:
+                        Number(
+                            stock.kurs
+                        ),
 
-                        branch_id:
-                            Number(
-                                stock.branch_id
-                            ),
+                    eps_2025:
+                        Number(
+                            stock.eps_2025
+                        ),
 
-                        kurs:
-                            Number(
-                                stock.kurs
-                            ),
-
-                        eps_2025:
-                            Number(
-                                stock.eps_2025
-                            ),
-
-                        eps_2026:
-                            Number(
-                                stock.eps_2026
-                            )
-                    });
+                    eps_2026:
+                        Number(
+                            stock.eps_2026
+                        )
+                });
 
 
             request.onsuccess =
@@ -877,9 +806,10 @@ async function updateStock(
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -897,23 +827,19 @@ async function deleteStock(
     return new Promise(
         (resolve, reject) => {
 
-            const transaction =
+            const request =
                 db.transaction(
                     STOCKS_STORE,
                     "readwrite"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        STOCKS_STORE
+                )
+                .objectStore(
+                    STOCKS_STORE
+                )
+                .delete(
+                    Number(
+                        stockId
                     )
-                    .delete(
-                        Number(
-                            stockId
-                        )
-                    );
+                );
 
 
             request.onsuccess =
@@ -921,9 +847,10 @@ async function deleteStock(
 
 
             request.onerror =
-                () => reject(
-                    request.error
-                );
+                () =>
+                    reject(
+                        request.error
+                    );
 
         }
     );
@@ -931,8 +858,9 @@ async function deleteStock(
 
 
 // ============================================================
-// BEWERTUNG
+// BEWERTUNGSLOGIK
 // ============================================================
+
 
 function berechneKgv(
     kurs,
@@ -947,13 +875,15 @@ function berechneKgv(
     }
 
 
-    return Number(kurs)
+    return (
+        Number(kurs)
         /
-        Number(eps);
+        Number(eps)
+    );
 }
 
 
-function berechneBewertungsKgv(
+function berechneBasisKgv(
     kgv,
     forwardKgv
 ) {
@@ -974,34 +904,25 @@ function berechneBewertungsKgv(
 }
 
 
-function berechneTopKaufkurs(
-    epsFolgejahr,
-    kgvGruen
-) {
-
-    if (
-        Number(epsFolgejahr) <= 0
-    ) {
-
-        return null;
-    }
-
-
-    return (
-        Number(epsFolgejahr)
-        *
-        Number(kgvGruen)
-    );
-}
-
-
 function berechneGewinnwachstum(
     epsVorjahr,
     epsFolgejahr
 ) {
 
+    const alt =
+        Number(
+            epsVorjahr
+        );
+
+
+    const neu =
+        Number(
+            epsFolgejahr
+        );
+
+
     if (
-        Number(epsVorjahr) <= 0
+        alt <= 0
     ) {
 
         return null;
@@ -1009,22 +930,53 @@ function berechneGewinnwachstum(
 
 
     return (
-        Number(epsFolgejahr)
-        /
-        Number(epsVorjahr)
+        neu / alt
     ) - 1;
 }
 
 
-function berechnePeg(
-    bewertungsKgv,
+/*
+ * Wachstumsbereinigte Bewertungskennzahl
+ *
+ * Basis-KGV / (1 + Gewinnwachstum)
+ *
+ * Beispiel:
+ *
+ * Basis-KGV = 20
+ * Wachstum = +20 %
+ *
+ * 20 / 1,20 = 16,67
+ *
+ * Basis-KGV = 20
+ * Wachstum = -20 %
+ *
+ * 20 / 0,80 = 25,00
+ *
+ * Bei -100 % oder schlechter ist
+ * die Kennzahl nicht sinnvoll berechenbar.
+ */
+
+function berechneBewertungskennzahl(
+    basisKgv,
     gewinnwachstum
 ) {
 
     if (
-        bewertungsKgv === null ||
-        gewinnwachstum === null ||
-        gewinnwachstum <= 0
+        basisKgv === null ||
+        gewinnwachstum === null
+    ) {
+
+        return null;
+    }
+
+
+    const faktor =
+        1 +
+        gewinnwachstum;
+
+
+    if (
+        faktor <= 0
     ) {
 
         return null;
@@ -1032,150 +984,19 @@ function berechnePeg(
 
 
     return (
-        bewertungsKgv
-        /
-        (
-            gewinnwachstum
-            *
-            100
-        )
-    );
-}
-
-
-function berechneKgvScore(
-    bewertungsKgv,
-    branch
-) {
-
-    if (
-        bewertungsKgv === null
-    ) {
-
-        return null;
-    }
-
-
-    if (
-        bewertungsKgv
-        <=
-        Number(
-            branch.kgv_gruen
-        )
-    ) {
-
-        return 4;
-    }
-
-
-    if (
-        bewertungsKgv
-        <=
-        Number(
-            branch.kgv_gelb
-        )
-    ) {
-
-        return 3;
-    }
-
-
-    if (
-        bewertungsKgv
-        <=
-        Number(
-            branch.kgv_orange
-        )
-    ) {
-
-        return 2;
-    }
-
-
-    return 1;
-}
-
-
-function berechnePegScore(
-    peg,
-    branch
-) {
-
-    if (
-        peg === null
-    ) {
-
-        return 0;
-    }
-
-
-    if (
-        peg
-        <=
-        Number(
-            branch.peg_gruen
-        )
-    ) {
-
-        return 4;
-    }
-
-
-    if (
-        peg
-        <=
-        Number(
-            branch.peg_gelb
-        )
-    ) {
-
-        return 3;
-    }
-
-
-    if (
-        peg
-        <=
-        Number(
-            branch.peg_orange
-        )
-    ) {
-
-        return 2;
-    }
-
-
-    return 1;
-}
-
-
-function berechneGesamtscore(
-    kgvScore,
-    pegScore
-) {
-
-    if (
-        kgvScore === null
-    ) {
-
-        return null;
-    }
-
-
-    return (
-        kgvScore * 0.60
-        +
-        pegScore * 0.40
+        basisKgv /
+        faktor
     );
 }
 
 
 function berechneEntscheidung(
-    score
+    bewertungskennzahl,
+    branch
 ) {
 
     if (
-        score === null
+        bewertungskennzahl === null
     ) {
 
         return "Nicht bewertbar";
@@ -1183,7 +1004,11 @@ function berechneEntscheidung(
 
 
     if (
-        score >= 3.25
+        bewertungskennzahl
+        <=
+        Number(
+            branch.kgv_gruen
+        )
     ) {
 
         return "Kauf";
@@ -1191,10 +1016,26 @@ function berechneEntscheidung(
 
 
     if (
-        score >= 2.25
+        bewertungskennzahl
+        <=
+        Number(
+            branch.kgv_gelb
+        )
     ) {
 
         return "Aufbau";
+    }
+
+
+    if (
+        bewertungskennzahl
+        <=
+        Number(
+            branch.kgv_orange
+        )
+    ) {
+
+        return "Beobachten";
     }
 
 
@@ -1221,17 +1062,10 @@ function bewerteAktie(
         );
 
 
-    const bewertungsKgv =
-        berechneBewertungsKgv(
+    const basisKgv =
+        berechneBasisKgv(
             kgv,
             forwardKgv
-        );
-
-
-    const topKaufkurs =
-        berechneTopKaufkurs(
-            stock.eps_2026,
-            branch.kgv_gruen
         );
 
 
@@ -1242,31 +1076,29 @@ function bewerteAktie(
         );
 
 
-    const peg =
-        berechnePeg(
-            bewertungsKgv,
+    const bewertungskennzahl =
+        berechneBewertungskennzahl(
+            basisKgv,
             gewinnwachstum
         );
 
 
-    const kgvScore =
-        berechneKgvScore(
-            bewertungsKgv,
+    const topKaufkurs =
+        stock.eps_2026 > 0
+            ? Number(
+                stock.eps_2026
+            )
+            *
+            Number(
+                branch.kgv_gruen
+            )
+            : null;
+
+
+    const entscheidung =
+        berechneEntscheidung(
+            bewertungskennzahl,
             branch
-        );
-
-
-    const pegScore =
-        berechnePegScore(
-            peg,
-            branch
-        );
-
-
-    const gesamtscore =
-        berechneGesamtscore(
-            kgvScore,
-            pegScore
         );
 
 
@@ -1281,24 +1113,15 @@ function bewerteAktie(
 
         forwardKgv,
 
-        bewertungsKgv,
-
-        topKaufkurs,
+        basisKgv,
 
         gewinnwachstum,
 
-        peg,
+        bewertungskennzahl,
 
-        kgvScore,
+        topKaufkurs,
 
-        pegScore,
-
-        gesamtscore,
-
-        entscheidung:
-            berechneEntscheidung(
-                gesamtscore
-            )
+        entscheidung
     };
 }
 
@@ -1355,25 +1178,16 @@ async function renderStocks() {
                         branche:
                             "Unbekannte Branche",
 
-                        bewertungsKgv:
-                            null,
-
-                        topKaufkurs:
+                        basisKgv:
                             null,
 
                         gewinnwachstum:
                             null,
 
-                        peg:
+                        bewertungskennzahl:
                             null,
 
-                        kgvScore:
-                            null,
-
-                        pegScore:
-                            0,
-
-                        gesamtscore:
+                        topKaufkurs:
                             null,
 
                         entscheidung:
@@ -1391,13 +1205,15 @@ async function renderStocks() {
 
 
     evaluated.sort(
-        (a,b) =>
+        (a, b) =>
             (
-                b.gesamtscore ?? -1
+                b.bewertungskennzahl
+                ?? -Infinity
             )
             -
             (
-                a.gesamtscore ?? -1
+                a.bewertungskennzahl
+                ?? -Infinity
             )
     );
 
@@ -1454,44 +1270,71 @@ async function renderStocks() {
 }
 
 
+// ============================================================
+// AKTIENKARTE
+// ============================================================
+
 function renderStockCard(
     stock
 ) {
 
-    const status =
-        stock.entscheidung;
+    let statusClass =
+        "status-nicht";
 
 
-    const statusClassName =
-        status === "Kauf"
-            ? "status-kauf"
-            : status === "Aufbau"
-                ? "status-aufbau"
-                : status === "Kein Kauf"
-                    ? "status-kein-kauf"
-                    : "status-nicht";
+    if (
+        stock.entscheidung === "Kauf"
+    ) {
+
+        statusClass =
+            "status-kauf";
+
+    } else if (
+        stock.entscheidung === "Aufbau"
+    ) {
+
+        statusClass =
+            "status-aufbau";
+
+    } else if (
+        stock.entscheidung === "Beobachten"
+    ) {
+
+        statusClass =
+            "status-beobachten";
+
+    } else if (
+        stock.entscheidung === "Kein Kauf"
+    ) {
+
+        statusClass =
+            "status-kein-kauf";
+    }
 
 
-    const kgvClass =
-        scoreCss(
-            stock.kgvScore
-        );
+    let kennzahlClass =
+        "score-0";
 
 
-    const pegClass =
-        scoreCss(
-            stock.pegScore
-        );
+    if (
+        stock.bewertungskennzahl !== null
+    ) {
+
+        const branchKgv =
+            Number(
+                stock.bewertungskennzahl
+            );
 
 
-    const topGood =
-        stock.topKaufkurs !== null
-        &&
-        Number(stock.kurs)
-            <=
-            Number(stock.topKaufkurs)
-            ? "buy-good"
-            : "";
+        /*
+         * Für die farbliche Darstellung
+         * verwenden wir hier die vier
+         * Bewertungsstufen.
+         */
+
+        const branch =
+            null;
+    }
 
 
     return `
@@ -1515,10 +1358,13 @@ function renderStockCard(
 
                 </div>
 
+
                 <div class="stock-price">
+
                     ${formatEuro(
                         stock.kurs
                     )}
+
                 </div>
 
             </div>
@@ -1526,48 +1372,51 @@ function renderStockCard(
 
             <span class="
                 status
-                ${statusClassName}
+                ${statusClass}
             ">
+
                 ${escapeHtml(
-                    status
+                    stock.entscheidung
                 )}
+
             </span>
 
 
             <div class="metrics">
 
+
                 <div class="
                     metric
-                    ${kgvClass}
+                    ${kennzahlClass}
                 ">
 
                     <div class="metric-label">
-                        Bewertungs-KGV
+                        Bewertungskennzahl
                     </div>
 
                     <div class="metric-value">
+
                         ${
-                            stock.bewertungsKgv !== null
+                            stock.bewertungskennzahl !== null
                                 ? formatNumber(
-                                    stock.bewertungsKgv
+                                    stock.bewertungskennzahl
                                 )
                                 : "—"
                         }
+
                     </div>
 
                 </div>
 
 
-                <div class="
-                    metric
-                    ${topGood}
-                ">
+                <div class="metric buy-good">
 
                     <div class="metric-label">
                         Top-Kaufkurs
                     </div>
 
                     <div class="metric-value">
+
                         ${
                             stock.topKaufkurs !== null
                                 ? formatEuro(
@@ -1575,6 +1424,7 @@ function renderStockCard(
                                 )
                                 : "—"
                         }
+
                     </div>
 
                 </div>
@@ -1587,6 +1437,7 @@ function renderStockCard(
                     </div>
 
                     <div class="metric-value">
+
                         ${
                             stock.gewinnwachstum !== null
                                 ? formatPercent(
@@ -1594,73 +1445,29 @@ function renderStockCard(
                                 )
                                 : "—"
                         }
+
                     </div>
 
                 </div>
 
 
-                <div class="
-                    metric
-                    ${pegClass}
-                ">
+                <div class="metric">
 
                     <div class="metric-label">
-                        PEG
+                        Basis-KGV
                     </div>
 
                     <div class="metric-value">
+
                         ${
-                            stock.peg !== null
+                            stock.basisKgv !== null
                                 ? formatNumber(
-                                    stock.peg
+                                    stock.basisKgv
                                 )
                                 : "—"
                         }
+
                     </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="score-summary">
-
-                <div>
-
-                    <div class="score-description">
-                        Gesamtscore
-                    </div>
-
-                    <div class="score-big">
-                        ${
-                            stock.gesamtscore !== null
-                                ? formatNumber(
-                                    stock.gesamtscore
-                                )
-                                : "—"
-                        }
-                    </div>
-
-                </div>
-
-
-                <div style="text-align:right;">
-
-                    <div class="score-description">
-                        KGV / PEG
-                    </div>
-
-                    <strong>
-                        ${
-                            stock.kgvScore !== null
-                                ? stock.kgvScore
-                                : "—"
-                        }
-                        /
-                        ${
-                            stock.pegScore
-                        }
-                    </strong>
 
                 </div>
 
@@ -1670,9 +1477,13 @@ function renderStockCard(
             <button
                 class="secondary"
                 type="button"
-                style="margin-top:12px;"
+                style="
+                    margin-top:12px;
+                "
                 data-action="edit-stock"
-                data-id="${Number(stock.id)}"
+                data-id="${Number(
+                    stock.id
+                )}"
             >
                 Aktie bearbeiten
             </button>
@@ -1841,9 +1652,7 @@ async function editStock(
 
 
         window.scrollTo({
-
             top: 0,
-
             behavior: "smooth"
         });
 
@@ -1864,7 +1673,7 @@ async function editStock(
 
 
 // ============================================================
-// AKTIEN SPEICHERN
+// AKTIE SPEICHERN
 // ============================================================
 
 async function saveStock(
@@ -1992,7 +1801,8 @@ async function saveStock(
 
 
         alert(
-            "Speichern fehlgeschlagen:\n\n" +
+            "Speichern fehlgeschlagen:\n\n"
+            +
             error.message
         );
     }
@@ -2020,10 +1830,6 @@ async function removeCurrentStock() {
 
 
     if (!stock) {
-
-        alert(
-            "Aktie wurde nicht gefunden."
-        );
 
         return;
     }
@@ -2054,7 +1860,8 @@ async function removeCurrentStock() {
     } catch(error) {
 
         alert(
-            "Die Aktie konnte nicht gelöscht werden.\n\n" +
+            "Die Aktie konnte nicht gelöscht werden.\n\n"
+            +
             error.message
         );
     }
@@ -2150,8 +1957,12 @@ function renderRuleCard(
 
             <div class="rule-grid">
 
+
                 <div
-                    class="field rule-name"
+                    class="
+                        field
+                        rule-name
+                    "
                 >
 
                     <label>
@@ -2219,56 +2030,6 @@ function renderRuleCard(
                 </div>
 
 
-                <div class="field">
-
-                    <label>
-                        PEG Grün
-                    </label>
-
-                    <input
-                        data-field="peg_gruen"
-                        inputmode="decimal"
-                        value="${formatInput(
-                            branch.peg_gruen
-                        )}"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        PEG Gelb
-                    </label>
-
-                    <input
-                        data-field="peg_gelb"
-                        inputmode="decimal"
-                        value="${formatInput(
-                            branch.peg_gelb
-                        )}"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        PEG Orange
-                    </label>
-
-                    <input
-                        data-field="peg_orange"
-                        inputmode="decimal"
-                        value="${formatInput(
-                            branch.peg_orange
-                        )}"
-                    >
-
-                </div>
-
             </div>
 
 
@@ -2332,42 +2093,32 @@ async function saveBranch(
 
 
     const name =
-        get("name").trim();
+        get(
+            "name"
+        ).trim();
 
 
     const kgvGruen =
         parseNumber(
-            get("kgv_gruen")
+            get(
+                "kgv_gruen"
+            )
         );
 
 
     const kgvGelb =
         parseNumber(
-            get("kgv_gelb")
+            get(
+                "kgv_gelb"
+            )
         );
 
 
     const kgvOrange =
         parseNumber(
-            get("kgv_orange")
-        );
-
-
-    const pegGruen =
-        parseNumber(
-            get("peg_gruen")
-        );
-
-
-    const pegGelb =
-        parseNumber(
-            get("peg_gelb")
-        );
-
-
-    const pegOrange =
-        parseNumber(
-            get("peg_orange")
+            get(
+                "kgv_orange"
+            )
         );
 
 
@@ -2375,10 +2126,7 @@ async function saveBranch(
         name,
         kgvGruen,
         kgvGelb,
-        kgvOrange,
-        pegGruen,
-        pegGelb,
-        pegOrange
+        kgvOrange
     );
 
 
@@ -2396,16 +2144,7 @@ async function saveBranch(
             kgvGelb,
 
         kgv_orange:
-            kgvOrange,
-
-        peg_gruen:
-            pegGruen,
-
-        peg_gelb:
-            pegGelb,
-
-        peg_orange:
-            pegOrange
+            kgvOrange
     });
 
 
@@ -2461,38 +2200,11 @@ async function createBranch(
             );
 
 
-        const pegGruen =
-            parseNumber(
-                document.getElementById(
-                    "new-peg-green"
-                ).value
-            );
-
-
-        const pegGelb =
-            parseNumber(
-                document.getElementById(
-                    "new-peg-yellow"
-                ).value
-            );
-
-
-        const pegOrange =
-            parseNumber(
-                document.getElementById(
-                    "new-peg-orange"
-                ).value
-            );
-
-
         validateBranch(
             name,
             kgvGruen,
             kgvGelb,
-            kgvOrange,
-            pegGruen,
-            pegGelb,
-            pegOrange
+            kgvOrange
         );
 
 
@@ -2507,16 +2219,8 @@ async function createBranch(
                 kgvGelb,
 
             kgv_orange:
-                kgvOrange,
+                kgvOrange
 
-            peg_gruen:
-                pegGruen,
-
-            peg_gelb:
-                pegGelb,
-
-            peg_orange:
-                pegOrange
         });
 
 
@@ -2596,14 +2300,15 @@ async function removeBranch(
 }
 
 
+// ============================================================
+// BRANCHEN VALIDIEREN
+// ============================================================
+
 function validateBranch(
     name,
     kgvGruen,
     kgvGelb,
-    kgvOrange,
-    pegGruen,
-    pegGelb,
-    pegOrange
+    kgvOrange
 ) {
 
     if (!name) {
@@ -2617,14 +2322,11 @@ function validateBranch(
     if (
         kgvGruen === null ||
         kgvGelb === null ||
-        kgvOrange === null ||
-        pegGruen === null ||
-        pegGelb === null ||
-        pegOrange === null
+        kgvOrange === null
     ) {
 
         throw new Error(
-            "Bitte alle Bewertungswerte eingeben."
+            "Bitte alle KGV-Grenzen eingeben."
         );
     }
 
@@ -2645,29 +2347,11 @@ function validateBranch(
             "KGV muss aufsteigend sein: Grün < Gelb < Orange."
         );
     }
-
-
-    if (
-        !(
-            pegGruen
-            <
-            pegGelb
-            &&
-            pegGelb
-            <
-            pegOrange
-        )
-    ) {
-
-        throw new Error(
-            "PEG muss aufsteigend sein: Grün < Gelb < Orange."
-        );
-    }
 }
 
 
 // ============================================================
-// ANSICHTEN
+// NAVIGATION
 // ============================================================
 
 function showStocks() {
@@ -2703,12 +2387,10 @@ function showStocks() {
     renderStocks();
 
 
-    window.scrollTo(
-        {
-            top: 0,
-            behavior: "smooth"
-        }
-    );
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
@@ -2745,12 +2427,10 @@ function showRules() {
     renderRules();
 
 
-    window.scrollTo(
-        {
-            top: 0,
-            behavior: "smooth"
-        }
-    );
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
@@ -2772,7 +2452,9 @@ function parseNumber(
 
 
     let text =
-        String(value).trim();
+        String(
+            value
+        ).trim();
 
 
     if (!text) {
@@ -2801,7 +2483,9 @@ function parseNumber(
 
 
     const number =
-        Number(text);
+        Number(
+            text
+        );
 
 
     if (
@@ -2827,8 +2511,11 @@ function formatInput(
     ).toLocaleString(
         "de-DE",
         {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            minimumFractionDigits:
+                2,
+
+            maximumFractionDigits:
+                2
         }
     );
 }
@@ -2914,30 +2601,6 @@ function formatPercent(
 }
 
 
-function scoreCss(
-    score
-) {
-
-    if (score === 4) {
-        return "score-4";
-    }
-
-    if (score === 3) {
-        return "score-3";
-    }
-
-    if (score === 2) {
-        return "score-2";
-    }
-
-    if (score === 1) {
-        return "score-1";
-    }
-
-    return "score-0";
-}
-
-
 function escapeHtml(
     value
 ) {
@@ -2959,7 +2622,7 @@ function escapeHtml(
 
 
 // ============================================================
-// EVENT-DELEGATION FÜR DYNAMISCHE BUTTONS
+// EVENT DELEGATION
 // ============================================================
 
 document.addEventListener(
@@ -2978,11 +2641,11 @@ document.addEventListener(
         }
 
 
-        const action =
-            target.dataset.action;
-
-
         try {
+
+            const action =
+                target.dataset.action;
+
 
             if (
                 action ===
@@ -3049,51 +2712,13 @@ document.addEventListener(
 
         try {
 
-            // Datenbank öffnen
-            await openDatabase();
+            await initializeDatabase();
 
-
-            // Standardbranchen einmalig anlegen
-            const branches =
-                await getBranches();
-
-
-            if (
-                branches.length === 0
-            ) {
-
-                for (
-                    const branch
-                    of DEFAULT_BRANCHES
-                ) {
-
-                    try {
-
-                        await addBranch(
-                            branch
-                        );
-
-                    } catch(error) {
-
-                        console.warn(
-                            "Branche konnte nicht angelegt werden:",
-                            branch.name,
-                            error
-                        );
-                    }
-                }
-            }
-
-
-            // Branchen laden
             await loadBranchSelect();
 
-
-            // Aktien anzeigen
             await renderStocks();
 
 
-            // Aktien hinzufügen
             document
                 .getElementById(
                     "add-stock-button"
@@ -3104,7 +2729,6 @@ document.addEventListener(
                 );
 
 
-            // Aktien speichern
             document
                 .getElementById(
                     "stock-form"
@@ -3115,7 +2739,6 @@ document.addEventListener(
                 );
 
 
-            // Aktien löschen
             document
                 .getElementById(
                     "delete-stock-button"
@@ -3126,7 +2749,6 @@ document.addEventListener(
                 );
 
 
-            // Formular abbrechen
             document
                 .getElementById(
                     "cancel-stock-button"
@@ -3137,7 +2759,6 @@ document.addEventListener(
                 );
 
 
-            // Regeln oben
             document
                 .getElementById(
                     "rules-top-button"
@@ -3148,7 +2769,6 @@ document.addEventListener(
                 );
 
 
-            // Regeln zurück
             document
                 .getElementById(
                     "rules-back-button"
@@ -3159,7 +2779,6 @@ document.addEventListener(
                 );
 
 
-            // Navigation unten
             document
                 .getElementById(
                     "nav-stocks"
@@ -3180,6 +2799,16 @@ document.addEventListener(
                 );
 
 
+            document
+                .getElementById(
+                    "new-branch-form"
+                )
+                .addEventListener(
+                    "submit",
+                    createBranch
+                );
+
+
         } catch(error) {
 
             console.error(
@@ -3194,5 +2823,6 @@ document.addEventListener(
                 error.message
             );
         }
+
     }
 );

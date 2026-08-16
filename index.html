@@ -22,11 +22,6 @@
 
     <title>Aktienbewertung</title>
 
-
-    <!-- =====================================================
-         PWA
-         ===================================================== -->
-
     <link
         rel="manifest"
         href="manifest.json"
@@ -545,6 +540,16 @@
         }
 
 
+        .status-beobachten {
+
+            background:
+                var(--orange-bg);
+
+            color:
+                var(--orange-text);
+        }
+
+
         .status-kein-kauf {
 
             background:
@@ -681,48 +686,6 @@
 
             color:
                 var(--green-text);
-        }
-
-
-        .score-summary {
-
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                center;
-
-            margin-top:
-                12px;
-
-            padding-top:
-                12px;
-
-            border-top:
-                1px solid
-                var(--border);
-        }
-
-
-        .score-description {
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-        }
-
-
-        .score-big {
-
-            font-size:
-                20px;
-
-            font-weight:
-                800;
         }
 
 
@@ -885,7 +848,10 @@
                 grid;
 
             grid-template-columns:
-                repeat(2,1fr);
+                repeat(
+                    2,
+                    1fr
+                );
         }
 
 
@@ -988,10 +954,6 @@
 <body>
 
 
-<!-- =========================================================
-     HEADER
-     ========================================================= -->
-
 <header>
 
     <div class="header-inner">
@@ -1047,9 +1009,7 @@
         </button>
 
 
-        <!-- =================================================
-             AKTIENFORMULAR
-             ================================================= -->
+        <!-- AKTIENFORMULAR -->
 
         <div
             id="stock-form-card"
@@ -1193,9 +1153,7 @@
         </div>
 
 
-        <!-- =================================================
-             AKTIENÜBERSICHT
-             ================================================= -->
+        <!-- AKTIENÜBERSICHT -->
 
         <div class="section-header">
 
@@ -1243,7 +1201,7 @@
 
 
     <!-- =====================================================
-         BEWERTUNGSREGELN
+         REGELN
          ===================================================== -->
 
     <section
@@ -1277,9 +1235,7 @@
         </div>
 
 
-        <!-- =================================================
-             NEUE BRANCHE
-             ================================================= -->
+        <!-- NEUE BRANCHE -->
 
         <div class="card">
 
@@ -1299,7 +1255,7 @@
                         class="field rule-name"
                     >
 
-                        <label for="new-branch-name">
+                        <label>
                             Branchenname
                         </label>
 
@@ -1315,7 +1271,7 @@
 
                     <div class="field">
 
-                        <label for="new-kgv-green">
+                        <label>
                             KGV Grün
                         </label>
 
@@ -1332,7 +1288,7 @@
 
                     <div class="field">
 
-                        <label for="new-kgv-yellow">
+                        <label>
                             KGV Gelb
                         </label>
 
@@ -1349,7 +1305,7 @@
 
                     <div class="field">
 
-                        <label for="new-kgv-orange">
+                        <label>
                             KGV Orange
                         </label>
 
@@ -1363,64 +1319,15 @@
 
                     </div>
 
-
-                    <div class="field">
-
-                        <label for="new-peg-green">
-                            PEG Grün
-                        </label>
-
-                        <input
-                            id="new-peg-green"
-                            type="text"
-                            inputmode="decimal"
-                            placeholder="1,50"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="field">
-
-                        <label for="new-peg-yellow">
-                            PEG Gelb
-                        </label>
-
-                        <input
-                            id="new-peg-yellow"
-                            type="text"
-                            inputmode="decimal"
-                            placeholder="2,00"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="field">
-
-                        <label for="new-peg-orange">
-                            PEG Orange
-                        </label>
-
-                        <input
-                            id="new-peg-orange"
-                            type="text"
-                            inputmode="decimal"
-                            placeholder="2,50"
-                            required
-                        >
-
-                    </div>
-
                 </div>
 
 
                 <button
                     class="primary"
                     type="submit"
-                    style="margin-top:12px;"
+                    style="
+                        margin-top:12px;
+                    "
                 >
                     Branche hinzufügen
                 </button>
@@ -1430,17 +1337,11 @@
         </div>
 
 
-        <!-- =================================================
-             BESTEHENDE BRANCHEN
-             ================================================= -->
-
         <div
             id="branches-container"
         ></div>
 
-
     </section>
-
 
 </main>
 
@@ -1524,7 +1425,7 @@ if (
                     function(error) {
 
                         console.error(
-                            "Service Worker konnte nicht registriert werden:",
+                            "Service Worker:",
                             error
                         );
 

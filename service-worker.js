@@ -1,14 +1,22 @@
-const CACHE_NAME = "aktienbewertung-v2";
+const CACHE_NAME = "aktienbewertung-v3";
+
 
 const APP_FILES = [
-const APP_FILES = [
+
     "./",
+
     "./index.html",
+
     "./app.js",
+
     "./manifest.json",
+
     "./icon-192.png",
+
     "./icon-512.png"
+
 ];
+
 
 self.addEventListener(
     "install",
@@ -16,19 +24,22 @@ self.addEventListener(
 
         event.waitUntil(
 
-            caches.open(
-                CACHE_NAME
-            ).then(
-                function(cache) {
+            caches
+                .open(
+                    CACHE_NAME
+                )
+                .then(
+                    function(cache) {
 
-                    return cache.addAll(
-                        APP_FILES
-                    );
+                        return cache.addAll(
+                            APP_FILES
+                        );
 
-                }
-            )
+                    }
+                )
 
         );
+
 
         self.skipWaiting();
     }
@@ -41,38 +52,41 @@ self.addEventListener(
 
         event.waitUntil(
 
-            caches.keys().then(
-                function(names) {
+            caches
+                .keys()
+                .then(
+                    function(names) {
 
-                    return Promise.all(
+                        return Promise.all(
 
-                        names
-                            .filter(
-                                function(name) {
+                            names
+                                .filter(
+                                    function(name) {
 
-                                    return (
-                                        name !==
-                                        CACHE_NAME
-                                    );
+                                        return (
+                                            name !==
+                                            CACHE_NAME
+                                        );
 
-                                }
-                            )
-                            .map(
-                                function(name) {
+                                    }
+                                )
+                                .map(
+                                    function(name) {
 
-                                    return caches.delete(
-                                        name
-                                    );
+                                        return caches.delete(
+                                            name
+                                        );
 
-                                }
-                            )
+                                    }
+                                )
 
-                    );
+                        );
 
-                }
-            )
+                    }
+                )
 
         );
+
 
         self.clients.claim();
     }
@@ -85,24 +99,27 @@ self.addEventListener(
 
         event.respondWith(
 
-            caches.match(
-                event.request
-            ).then(
-                function(cachedResponse) {
+            caches
+                .match(
+                    event.request
+                )
+                .then(
+                    function(cachedResponse) {
 
-                    if (
-                        cachedResponse
-                    ) {
+                        if (
+                            cachedResponse
+                        ) {
 
-                        return cachedResponse;
+                            return cachedResponse;
+                        }
+
+
+                        return fetch(
+                            event.request
+                        );
+
                     }
-
-                    return fetch(
-                        event.request
-                    );
-
-                }
-            )
+                )
 
         );
 
