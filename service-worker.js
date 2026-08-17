@@ -1,22 +1,18 @@
-const CACHE_NAME = "aktienbewertung-v5";
-
+const CACHE_NAME = "aktienbewertung-v7";
 
 const APP_FILES = [
-
     "./",
-
     "./index.html",
-
     "./app.js",
-
     "./manifest.json",
-
     "./icon-192.png",
-
     "./icon-512.png"
-
 ];
 
+
+// ============================================================
+// INSTALL
+// ============================================================
 
 self.addEventListener(
     "install",
@@ -25,9 +21,7 @@ self.addEventListener(
         event.waitUntil(
 
             caches
-                .open(
-                    CACHE_NAME
-                )
+                .open(CACHE_NAME)
                 .then(
                     function(cache) {
 
@@ -40,11 +34,15 @@ self.addEventListener(
 
         );
 
-
+        // Neue Version sofort zur aktivierten Version machen
         self.skipWaiting();
     }
 );
 
+
+// ============================================================
+// ACTIVATE
+// ============================================================
 
 self.addEventListener(
     "activate",
@@ -84,18 +82,77 @@ self.addEventListener(
 
                     }
                 )
+                .then(
+                    function() {
+
+                        // Neue Version sofort für
+                        // bereits geöffnete Seiten verwenden
+                        return self.clients.claim();
+
+                    }
+                )
 
         );
 
-
-        self.clients.claim();
     }
 );
 
 
+// ============================================================
+// FETCH
+// ============================================================
+
 self.addEventListener(
     "fetch",
     function(event) {
+
+        /*
+         * Für unsere eigenen App-Dateien:
+         * Cache verwenden.
+         *
+         * Für alles andere:
+         * Netzwerk.
+         */
+
+        const url =
+            new URL(
+                event.request.url
+            );
+
+
+        const isAppFile =
+            url.pathname.endsWith(
+                "/"
+            )
+            ||
+            url.pathname.endsWith(
+                "/index.html"
+            )
+            ||
+            url.pathname.endsWith(
+                "/app.js"
+            )
+            ||
+            url.pathname.endsWith(
+                "/manifest.json"
+            )
+            ||
+            url.pathname.endsWith(
+                "/icon-192.png"
+            )
+            ||
+            url.pathname.endsWith(
+                "/icon-512.png"
+            );
+
+
+        if (
+            !isAppFile
+        ) {
+
+            return;
+        }
+
 
         event.respondWith(
 

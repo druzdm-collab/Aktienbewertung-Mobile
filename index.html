@@ -1399,44 +1399,83 @@
 
 <script>
 
+<script>
+
 if (
     "serviceWorker" in navigator
 ) {
 
     window.addEventListener(
         "load",
-        function() {
+        async function() {
 
-            navigator.serviceWorker
-                .register(
-                    "service-worker.js"
-                )
-                .then(
-                    function(registration) {
+            try {
 
-                        console.log(
-                            "Service Worker registriert:",
-                            registration.scope
-                        );
+                const registration =
+                    await navigator.serviceWorker.register(
+                        "service-worker.js"
+                    );
 
-                    }
-                )
-                .catch(
-                    function(error) {
 
-                        console.error(
-                            "Service Worker:",
-                            error
+                /*
+                 * Nach einer neuen Veröffentlichung
+                 * aktiv nach einem neuen Service Worker
+                 * suchen.
+                 */
+
+                await registration.update();
+
+
+                registration.addEventListener(
+                    "updatefound",
+                    function() {
+
+                        const newWorker =
+                            registration.installing;
+
+
+                        if (!newWorker) {
+                            return;
+                        }
+
+
+                        newWorker.addEventListener(
+                            "statechange",
+                            function() {
+
+                                if (
+                                    newWorker.state ===
+                                    "activated"
+                                ) {
+
+                                    console.log(
+                                        "Neue App-Version aktiviert."
+                                    );
+
+                                }
+
+                            }
                         );
 
                     }
                 );
+
+
+            } catch(error) {
+
+                console.error(
+                    "Service Worker:",
+                    error
+                );
+
+            }
 
         }
     );
 
 }
 
+</script>
 </script>
 
 
