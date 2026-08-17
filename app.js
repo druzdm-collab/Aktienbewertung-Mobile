@@ -1063,15 +1063,20 @@ function berechneEntscheidung(
 // ============================================================
 
 function berechneTopKaufkurs(
+    epsVorjahr,
     epsFolgejahr,
     branch
 ) {
 
-    const eps =
+    const eps25 =
+        Number(
+            epsVorjahr
+        );
+
+    const eps26 =
         Number(
             epsFolgejahr
         );
-
 
     const kgvGruen =
         Number(
@@ -1080,7 +1085,10 @@ function berechneTopKaufkurs(
 
 
     if (
-        eps <= 0 ||
+        eps25 <= 0
+        ||
+        eps26 <= 0
+        ||
         kgvGruen <= 0
     ) {
 
@@ -1088,9 +1096,24 @@ function berechneTopKaufkurs(
     }
 
 
-    return eps * kgvGruen;
+    return (
+        kgvGruen
+        *
+        (
+            2
+            *
+            eps26
+            *
+            eps26
+        )
+        /
+        (
+            eps25
+            +
+            eps26
+        )
+    );
 }
-
 
 // ============================================================
 // PROZENTUALER ABSTAND ZUM TOP-KAUFKURS
@@ -1185,12 +1208,12 @@ function bewerteAktie(
         );
 
 
-    const topKaufkurs =
-        berechneTopKaufkurs(
-            stock.eps_2026,
-            branch
-        );
-
+const topKaufkurs =
+    berechneTopKaufkurs(
+        stock.eps_2025,
+        stock.eps_2026,
+        branch
+    );
 
     const abstandTopKaufkurs =
         berechneAbstandTopKaufkurs(
